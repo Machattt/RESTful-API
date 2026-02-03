@@ -15,6 +15,7 @@ class coffeController extends Controller
     {
         $data = coffe::all();
         return view('coffeView', compact('data'));
+
     }
 
     /**
@@ -31,19 +32,6 @@ class coffeController extends Controller
     public function store(Request $request)
     {
 
-    $request->validate([
-    'hour_of_day' => 'required|numeric',
-    'cash_type'   => 'required|string',
-    'money'       => 'required|numeric',
-    'coffee_name' => 'required|string',
-    'Time_of_Day' => 'required|string',
-    'Weekday'     => 'required|string',
-    'Month_name'  => 'required|string',
-    'Weekdaysort' => 'required|numeric',
-    'Monthsort'   => 'required|numeric',
-    'Date'        => 'required|date',
-    'Time'        => 'required',
-]);
     }
 
     /**

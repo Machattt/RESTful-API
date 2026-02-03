@@ -7,6 +7,20 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class coffeResource extends JsonResource
 {
+    public $status;
+    public $message;
+
+
+    public function __construct($status, $message, $resource)
+    {
+        // return parent::__construct($resource);
+        $this->status = $status;
+        $this->message = $message;
+        return parent:: __construct($resource);
+    }
+
+
+
     /**
      * Transform the resource into an array.
      *
@@ -14,19 +28,13 @@ class coffeResource extends JsonResource
      */
     public function toArray(Request $request): array
 {
+
     return [
-        'id'          => $this->_id,
-        'hourday'     => $this->hour_of_day,
-        'cashtype'    => $this->cash_type,    
-        'money'       => $this->money,        
-        'coffeename'  => $this->coffee_name,  
-        'timeday'     => $this->Time_of_Day, 
-        'weekday'     => $this->Weekday,
-        'monthname'   => $this->Month_name,
-        'weekdaysort' => $this->Weekdaysort,
-        'monthsort'   => $this->Monthsort,
-        'date'        => $this->Date,
-        'time'        => $this->Time
+        'status'      => $this->status,
+        'message'     => $this->message,
+        'data' => $this->resource
+        //'data' => [] 
     ];
 }
+
 }

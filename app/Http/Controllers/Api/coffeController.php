@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\coffeResource;
 use App\Models\coffe;
+use Illuminate\Support\Facades\Validator;
 
 class coffeController extends Controller
 {
@@ -15,7 +16,8 @@ class coffeController extends Controller
     public function index()
     {
         $data = coffe::all();
-        return $data;
+        // return $data;
+        return new coffeResource(true, 'Menampilkan semua data coffe', $data);
     }
 
     /**
@@ -23,7 +25,28 @@ class coffeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+     $validator = Validator::make($request->all(), [
+
+
+    'hour_of_day' => 'required|numeric',
+    'cash_type'   => 'required|string',
+    'money'       => 'required|numeric',
+    'coffee_name' => 'required|string',
+    'Time_of_Day' => 'required|string',
+    'Weekday'     => 'required|string',
+    'Month_name'  => 'required|string',
+    'Weekdaysort' => 'required|numeric',
+    'Monthsort'   => 'required|numeric',
+    'Date'        => 'required|date',
+    'Time'        => 'required',
+]);
+
+    if($validator->fails()){
+        return response()->json($validator->errors(), 422);
+    }
+    $data = coffe::create($request->all());
+    return new coffeResource(true, 'Data coffe berhasil ditambahkan', $data);
+
     }
 
     /**
@@ -31,6 +54,12 @@ class coffeController extends Controller
      */
     public function show(string $id)
     {
+        $coffe = coffe::find($id);
+
+        if (!$coffe) {
+            return response()->json(['message' => 'data coffe tidak ditemukan'], 404);
+        }
+
         return coffe::findOrFail($id)->toResource(coffeResource::class);
     }
 
@@ -39,9 +68,33 @@ class coffeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $coffe = coffe::findOrFail($id);
+        $coffe = coffe::find($id);
+
+        if (!$coffe) {
+            return response()->json(['message' => 'data coffe tidak ditemukan'], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'hour_of_day' => 'numeric',
+            'cash_type'   => 'string',
+            'money'       => 'numeric',
+            'coffee_name' => 'string',
+            'Time_of_Day' => 'string',
+            'Weekday'     => 'string',
+            'Month_name'  => 'string',
+            'Weekdaysort' => 'numeric',
+            'Monthsort'   => 'numeric',
+            'Date'        => 'date',
+            'Time'        => 'time',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
         $coffe->update($request->all());
-        return new coffeResource($coffe);
+        
+        return new coffeResource(true, 'data berhasil diupdate');
     }
 
     /**
@@ -49,6 +102,14 @@ class coffeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $coffe = coffe::find($id);
+
+        if (!$coffe) {
+            return response()->json(['message' => 'data coffe tidak ditemukan'], 404);
+        }
+
+        $coffe->delete();
+        return response()->json(['message' => 'data coffe berhasil dihapus'], 200);
     }
 }
+
