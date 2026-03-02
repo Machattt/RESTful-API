@@ -33,7 +33,6 @@ class coffeResource extends JsonResource
         'status'      => $this->status,
         'message'     => $this->message,
         'data' => $this->resource
-        //'data' => [] 
     ];
 }
 
